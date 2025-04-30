@@ -1,5 +1,9 @@
 # github-copilot-agent-astro-sample
 
+GitHub Copilot Agentを用いて、Astro・Tailwind CSS・DaisyUIを利用したポートフォリオサイトを作成する手順を記録したものです。
+
+## プロジェクト概要
+
 本プロジェクトは、Astro・Tailwind CSS・DaisyUIを用いたポートフォリオサイトです。制作物はMarkdownで管理し、AstroのContent Collections機能で記事として表示します。Cloudflare Pages + Wranglerでデプロイ可能です。
 
 ### 利用技術・構成
