@@ -1,16 +1,86 @@
 ---
+import "../styles/global.css";
+import { getCollection } from "astro:content";
 
+const works = await getCollection("works");
+const latestWork = works.length > 0 ? works[0] : null;
 ---
 
-<html lang="en">
+<html lang="ja">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>ポートフォリオサイト</title>
 	</head>
-	<body>
-		<h1>Astro</h1>
+	<body class="bg-base-100 min-h-screen">
+		<main class="container mx-auto px-4 py-8">
+			<h1 class="text-4xl font-bold mb-8">山田 太郎のポートフォリオ</h1>
+			<div class="grid gap-8 md:grid-cols-3">
+				<div class="card bg-base-200 shadow-xl">
+					<div class="card-body">
+						<h2 class="card-title">プロフィール</h2>
+						<p>自己紹介・スキル・連絡先はこちら</p>
+						<div class="card-actions justify-end mt-4">
+							<a href="/profile" class="btn btn-primary"
+								>プロフィールを見る</a
+							>
+						</div>
+					</div>
+				</div>
+				<div class="card bg-base-200 shadow-xl md:col-span-2">
+					<div class="card-body">
+						<h2 class="card-title">制作物ダイジェスト</h2>
+						{
+							latestWork ? (
+								<div>
+									<h3 class="text-xl font-bold mb-2">
+										{latestWork.data.title}
+									</h3>
+									<p class="text-sm text-base-content/60 mb-2">
+										{latestWork.data.date}
+									</p>
+									<p class="mb-2">
+										{latestWork.data.description}
+									</p>
+									<div class="flex flex-wrap gap-2 mb-2">
+										{latestWork.data.tags &&
+											latestWork.data.tags.map((tag) => (
+												<span
+													class="badge badge-outline"
+													key={tag}
+												>
+													{tag}
+												</span>
+											))}
+									</div>
+									<a
+										href={
+											latestWork.data.externalUrl ??
+											`/works/${latestWork.slug}/`
+										}
+										class="link link-primary"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										詳細を見る
+									</a>
+								</div>
+							) : (
+								<p>制作物はまだありません。</p>
+							)
+						}
+						<div class="card-actions justify-end mt-4">
+							<a href="/works" class="btn btn-secondary"
+								>制作物一覧へ</a
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="mt-12 text-center">
+				<a href="/links" class="btn btn-outline">外部リンク一覧</a>
+			</div>
+		</main>
 	</body>
 </html>

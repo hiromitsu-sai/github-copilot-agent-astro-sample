@@ -1,0 +1,64 @@
+---
+import { getEntryBySlug, getCollection } from "astro:content";
+import "../../styles/global.css";
+
+export async function getStaticPaths() {
+    const works = await getCollection("works");
+    return works.map((work) => ({ params: { slug: work.slug } }));
+}
+
+const { slug } = Astro.params;
+const work = await getEntryBySlug("works", slug);
+if (!work) {
+    throw new Error("記事が見つかりません");
+}
+---
+
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <title>{work.data.title} | 制作物</title>
+    </head>
+    <body class="bg-base-100 min-h-screen">
+        <main class="container mx-auto px-4 py-8">
+            <div class="card bg-base-200 shadow-xl">
+                <div class="card-body">
+                    <h1 class="card-title text-3xl mb-2">{work.data.title}</h1>
+                    <p class="text-sm text-base-content/60 mb-4">
+                        {work.data.date}
+                    </p>
+                    <p class="mb-4">{work.data.description}</p>
+                    {
+                        work.data.tags && (
+                            <div class="mb-4 flex flex-wrap gap-2">
+                                {work.data.tags.map((tag) => (
+                                    <span class="badge badge-outline" key={tag}>
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                        )
+                    }
+                    <article class="prose max-w-none" set:html={work.body} />
+                    {
+                        work.data.externalUrl && (
+                            <div class="mt-6">
+                                <a
+                                    href={work.data.externalUrl}
+                                    class="btn btn-primary"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    外部リンクを見る
+                                </a>
+                            </div>
+                        )
+                    }
+                </div>
+            </div>
+            <div class="mt-8">
+                <a href="/works" class="btn btn-outline">← 一覧に戻る</a>
+            </div>
+        </main>
+    </body>
+</html>
